@@ -63,7 +63,7 @@ const run = function (_url, sona_ekle = false) {
             opacity: '0.3',
             flex: 'none'
           });        
-        else if( fiyatNumber < 10)
+        else if( fiyatNumber < 11)
           $(`#${guid}`).css({
             // display: 'inline-flex',
             border: '2px solid green',
