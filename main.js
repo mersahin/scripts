@@ -39,7 +39,7 @@ const run = function (url, append = false) {
         // if preise weniger als 10 euro then border is green
         let fiyat = $(this).find(".aditem-main--middle--price-shipping--price").text().trim();
         let fiyatNumber = fiyat.replace("€", "").replace("VB", "").replace(".", ",")
-        if (fiyat == "Zu verschenken") {
+        if (fiyat == "") {
           $(`#${guid}`).css({
             // display: 'inline-flex',
             border: '2px solid yellow',
