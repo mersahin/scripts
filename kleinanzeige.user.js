@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kleinanzeige
 // @namespace    http://tampermonkey.net/
-// @version      0.20
+// @version      0.21
 // @description  try to take over the world!
 // @author       @mersahin
 // @require      https://code.jquery.com/jquery-3.6.0.min.js
