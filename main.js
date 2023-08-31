@@ -21,6 +21,11 @@ let url = location.href;// "https://www.kleinanzeigen.de/s-40789/l1116r5";
 const run = function (url, append = false) {
 
   $.get(`${url}`, function (data) {
+    if(url.includes("seite:")){
+      let seite = parseInt(url.split("seite:")[1].split("/")[0]);
+      seite--;
+      url = url.replace("seite:" + (seite + 1), "seite:" + seite);
+    }
     let ilanlar = $(data).find(
       ".ad-listitem:not(.is-topad) .aditem-main"
     );
@@ -95,7 +100,7 @@ const run = function (url, append = false) {
 run(location.href, true, 1);
 // refresh 5 saniyede bir
 setInterval(function() {
-   run(url)
+  run(url)
 }, interval);
 
 // refresh every 20 seconds
