@@ -16,7 +16,7 @@ $("#ilanlar").css({
 });
 let visitedLinks = [];
 // Zamanlayıcı aralığı (örneğin 5 dakika)
-const interval = 5 * 1000; // 5 saniye
+const interval = 5 * 1000; // 5 saniyes
 let url = location.href;// "https://www.kleinanzeigen.de/s-40789/l1116r5";
 const run = function (_url, sona_ekle = false) {
   console.log("run", _url);
@@ -28,7 +28,7 @@ const run = function (_url, sona_ekle = false) {
       if(seite < 2){
         url = _url.replace("/seite:" + (seite + 1), "");
         // url = url.replace("/s-seite:" + (seite + 1), "/s-seite:2");
-        url = url.replace("s-seite:1", "s-suchen.html");
+        url = url.replace("s-seite:2", "s-suchen.html");
       }
       else{
         url = _url.replace("seite:" + (seite + 1), "seite:" + seite);
