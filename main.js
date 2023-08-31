@@ -38,7 +38,7 @@ const run = function (url, append = false) {
           $("#yanyana-resimler").prepend("<div class='ilan' id='" + guid + "'></div>");
         // if preise weniger als 10 euro then border is green
         let fiyat = $(this).find(".aditem-main--middle--price-shipping--price").text().trim();
-        let fiyatNumber = fiyat.replace("€", "").replace("VB", "").replace(".", ",")
+        let fiyatNumber = fiyat.replace("€", "").replace("VB", "").replace(".", "")
         if (fiyat == "" || fiyat == "Zu verschenken") {
           $(`#${guid}`).css({
             // display: 'inline-flex',
