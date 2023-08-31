@@ -49,14 +49,12 @@ const run = function (url, append = false) {
             // display: 'inline-flex',
             border: '2px solid yellow',
             background: 'yellow'
-          });
-        
-        else if (fiyatNumber > 100)
+          });        
+        else if (fiyatNumber > 100 && fiyat == "VB")
           $(`#${guid}`).css({
             opacity: '0.3',
             flex: 'none'
-          });
-        
+          });        
         else if( fiyatNumber < 10)
           $(`#${guid}`).css({
             // display: 'inline-flex',
