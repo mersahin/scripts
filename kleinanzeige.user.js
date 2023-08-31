@@ -10,5 +10,6 @@
 // @exclude      https://www.kleinanzeigen.de/s-anzeige/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=kleinanzeigen.de
 // @updateURL    https://github.com/mersahin/scripts/raw/main/kleinanzeige.user.js
+// @downloadURL  https://github.com/mersahin/scripts/raw/main/kleinanzeige.user.js
 // @grant        none
 // ==/UserScript==
