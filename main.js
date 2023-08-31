@@ -18,14 +18,14 @@ let visitedLinks = [];
 // Zamanlayıcı aralığı (örneğin 5 dakika)
 const interval = 5 * 1000; // 5 saniye
 let url = location.href;// "https://www.kleinanzeigen.de/s-40789/l1116r5";
-const run = function (url, append = false) {
+const run = function (_url, append = false) {
 
-  $.get(`${url}`, function (data) {
-    if(url.includes("seite:")){
+  $.get(`${_url}`, function (data) {
+    if(_url.includes("seite:")){
       append = true;
-      let seite = parseInt(url.split("seite:")[1].split("/")[0]);
+      let seite = parseInt(_url.split("seite:")[1].split("/")[0]);
       seite--;
-      url = url.replace("seite:" + (seite + 1), "seite:" + seite);
+      url = _url.replace("seite:" + (seite + 1), "seite:" + seite);
     }
     let ilanlar = $(data).find(
       ".ad-listitem:not(.is-topad) .aditem-main"
