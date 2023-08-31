@@ -28,7 +28,7 @@ const run = function (_url, sona_ekle = false) {
       if(seite < 2){
         url = _url.replace("/seite:" + (seite + 1), "");
         // url = url.replace("/s-seite:" + (seite + 1), "/s-seite:2");
-        url = url.replace("s-seite:2", "s-suchen.html");
+        url = url.replace("s-seite:2", "s-suchen.html").replace("s-seite:1", "s-suchen.html");
       }
       else{
         url = _url.replace("seite:" + (seite + 1), "seite:" + seite);
