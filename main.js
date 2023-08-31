@@ -22,6 +22,7 @@ const run = function (url, append = false) {
 
   $.get(`${url}`, function (data) {
     if(url.includes("seite:")){
+      append = true;
       let seite = parseInt(url.split("seite:")[1].split("/")[0]);
       seite--;
       url = url.replace("seite:" + (seite + 1), "seite:" + seite);
