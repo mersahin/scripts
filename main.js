@@ -47,11 +47,9 @@ const run = function (url, append = false) {
           });
         }
         else if (fiyatNumber > 100){
-          //gray background
           $(`#${guid}`).css({
-            // display: 'inline-flex',
-            border: '2px solid gray',
-            background: 'gray'
+            opacity: '0.3',
+            flex: 'none'
           });
         }
 
