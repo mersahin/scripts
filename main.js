@@ -31,7 +31,7 @@ const run = function (_url, sona_ekle = false) {
       }
       else{
         url = _url.replace("seite:" + (seite + 1), "seite:" + seite);
-        url = _url.replace("s-seite:1", "s-suchen.html");
+        url = url.replace("s-seite:1", "s-suchen.html");
       }
     }
     let ilanlar = $(data).find(
