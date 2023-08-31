@@ -1,4 +1,3 @@
-
 "use strict";
 // Resimleri göstereceğimiz bir div eklemeliyiz
 $("body").prepend('<div id="yanyana-resimler"></div>');
