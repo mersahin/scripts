@@ -50,7 +50,7 @@ const run = function (url, append = false) {
             border: '2px solid yellow',
             background: 'yellow'
           });        
-        else if (fiyatNumber > 100 && fiyat == "VB")
+        else if (fiyatNumber > 100 || fiyat == "VB")
           $(`#${guid}`).css({
             opacity: '0.3',
             flex: 'none'
