@@ -1,6 +1,6 @@
 "use strict";
 // Resimleri göstereceğimiz bir div eklemeliyiz
-$("body").prepend('<div id="yanyana-resimler"></div>');
+$("body").prepend('<div id="ilanlar"></div>');
 const guid_generator = function () {
   const s4 = function () {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -10,7 +10,7 @@ const guid_generator = function () {
   return `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
 };
 // Stil eklemek için CSS kullanabilirsiniz
-$("#yanyana-resimler").css({
+$("#ilanlar").css({
   display: "flex",
   'flex-flow': 'wrap'
 });
@@ -18,11 +18,11 @@ let visitedLinks = [];
 // Zamanlayıcı aralığı (örneğin 5 dakika)
 const interval = 5 * 1000; // 5 saniye
 let url = location.href;// "https://www.kleinanzeigen.de/s-40789/l1116r5";
-const run = function (_url, append = false) {
-
+const run = function (_url, sona_ekle = false) {
+  console.log("run", _url);
   $.get(`${_url}`, function (data) {
     if(_url.includes("seite:")){
-      append = true;
+      sona_ekle = false;
       let seite = parseInt(_url.split("seite:")[1].split("/")[0]);
       seite--;
       url = _url.replace("seite:" + (seite + 1), "seite:" + seite);
@@ -38,10 +38,10 @@ const run = function (_url, append = false) {
       if (!visitedLinks.includes(link)) {
         let guid = guid_generator();
         // all link one div with guid
-        if(append)
-          $("#yanyana-resimler").append("<div class='ilan' id='" + guid + "'></div>");
+        if(sona_ekle)
+          $("#ilanlar").append("<div class='ilan' id='" + guid + "'></div>");
         else
-          $("#yanyana-resimler").prepend("<div class='ilan' id='" + guid + "'></div>");
+          $("#ilanlar").prepend("<div class='ilan' id='" + guid + "'></div>");
         // if preise weniger als 10 euro then border is green
         let fiyat = $(this).find(".aditem-main--middle--price-shipping--price").text().trim();
         let fiyatNumber = fiyat.replace("€", "").replace("VB", "").replace(".", "").trim();
@@ -96,7 +96,7 @@ const run = function (_url, append = false) {
   });
 };
 // Zamanlayıcıyı başlatma
-run(location.href, true, 1);
+run(location.href, true);
 // refresh 5 saniyede bir
 setInterval(function() {
   run(url)
