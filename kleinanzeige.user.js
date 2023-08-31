@@ -52,8 +52,25 @@ const run = function (url, append = false) {
         else
           $("#yanyana-resimler").prepend("<div class='ilan' id='" + guid + "'></div>");
         // if preise weniger als 10 euro then border is green
-        let fiyat = $(this).find(".aditem-main--middle--price-shipping--price").text().trim()
-        if(fiyat.replace("€", "").replace("VB", "").replace(".", ",") < 10 || fiyat == "Zu verschenken")
+        let fiyat = $(this).find(".aditem-main--middle--price-shipping--price").text().trim();
+        let fiyatNumber = fiyat.replace("€", "").replace("VB", "").replace(".", ",")
+        if (fiyat == "Zu verschenken") {
+          $(`#${guid}`).css({
+            // display: 'inline-flex',
+            border: '2px solid yellow',
+            background: 'yellow'
+          });
+        }
+        else if (fiyatNumber > 100){
+          //gray background
+          $(`#${guid}`).css({
+            // display: 'inline-flex',
+            border: '2px solid gray',
+            background: 'gray'
+          });
+        }
+
+        else if( fiyatNumber < 10)
           $(`#${guid}`).css({
             // display: 'inline-flex',
             border: '2px solid green',
