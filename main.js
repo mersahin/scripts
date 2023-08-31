@@ -25,10 +25,14 @@ const run = function (_url, sona_ekle = false) {
       sona_ekle = false;
       let seite = parseInt(_url.split("seite:")[1].split("/")[0]);
       seite--;
-      if(seite == 2)
+      if(seite == 2){
         url = _url.replace("/seite:" + (seite + 1), "");
-      else
+        url = _url.replace("/s-seite:" + (seite + 1), "/s-seite:2");
+      }
+      else{
         url = _url.replace("seite:" + (seite + 1), "seite:" + seite);
+        url = _url.replace("s-seite:" + (seite + 1), "s-suchen.html");
+      }
     }
     let ilanlar = $(data).find(
       ".ad-listitem:not(.is-topad) .aditem-main"
