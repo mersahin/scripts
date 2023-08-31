@@ -80,7 +80,7 @@ const run = function (url, append = false) {
 
             if (imageElement.length > 0) {
               let clonedImage = imageElement.clone();
-              clonedImage.css("height", (fiyatNumber > 100 ? "100px" : "150px"));
+              clonedImage.css("height", (fiyatNumber > 100 ? "50px" : "150px"));
               clonedImage.wrap('<a href="' + link + '" target="_blank"></a>');
               $(`#${guid}`).append(clonedImage.parent());
             }
