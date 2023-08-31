@@ -39,20 +39,19 @@ const run = function (url, append = false) {
         // if preise weniger als 10 euro then border is green
         let fiyat = $(this).find(".aditem-main--middle--price-shipping--price").text().trim();
         let fiyatNumber = fiyat.replace("€", "").replace("VB", "").replace(".", "").trim();
-        if (fiyat == "" || fiyat == "Zu verschenken") {
+        if (fiyat == "" || fiyat == "Zu verschenken")
           $(`#${guid}`).css({
             // display: 'inline-flex',
             border: '2px solid yellow',
             background: 'yellow'
           });
-        }
-        else if (fiyatNumber > 100){
+        
+        else if (fiyatNumber > 100)
           $(`#${guid}`).css({
             opacity: '0.3',
             flex: 'none'
           });
-        }
-
+        
         else if( fiyatNumber < 10)
           $(`#${guid}`).css({
             // display: 'inline-flex',
@@ -81,7 +80,7 @@ const run = function (url, append = false) {
 
             if (imageElement.length > 0) {
               let clonedImage = imageElement.clone();
-              clonedImage.css("height", "150px");
+              clonedImage.css("height", (fiyatNumber > 100 ? "100px" : "150px"));
               clonedImage.wrap('<a href="' + link + '" target="_blank"></a>');
               $(`#${guid}`).append(clonedImage.parent());
             }
