@@ -12,7 +12,8 @@ const guid_generator = function () {
 // Stil eklemek için CSS kullanabilirsiniz
 $("#ilanlar").css({
   display: "flex",
-  'flex-flow': 'wrap'
+  'flex-flow': 'wrap',
+  background: 'black'
 });
 let visitedLinks = [];
 // Zamanlayıcı aralığı (örneğin 5 dakika)
@@ -57,12 +58,12 @@ const run = function (_url, sona_ekle = false) {
             // display: 'inline-flex',
             border: '2px solid yellow',
             background: 'yellow'
-          });        
+          });
         else if (fiyatNumber > 100 || fiyat == "VB")
           $(`#${guid}`).css({
             opacity: '0.3',
             flex: 'none'
-          });        
+          });
         else if( fiyatNumber < 11)
           $(`#${guid}`).css({
             // display: 'inline-flex',
@@ -72,7 +73,8 @@ const run = function (_url, sona_ekle = false) {
         else
           $(`#${guid}`).css({
             // display: 'inline-flex',
-            border: '2px solid red'
+            border: '2px solid red',
+            background: 'lightgray'
           });
 
         // add information from class aditem-main--middle
