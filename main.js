@@ -61,7 +61,8 @@ const run = function (_url, sona_ekle = false) {
           });
         else if (fiyatNumber > 100 || fiyat == "VB")
           $(`#${guid}`).css({
-            opacity: '0.3',
+            opacity: '0.3',            
+            background: 'lightgray',
             flex: 'none'
           });
         else if( fiyatNumber < 11)
