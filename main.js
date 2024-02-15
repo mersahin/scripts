@@ -1,6 +1,80 @@
 "use strict";
-// Resimleri göstereceğimiz bir div eklemeliyiz
-$("body").prepend('<div id="ilanlar"></div>');
+
+
+
+var css = `
+.sayfa_bilgisi {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  inline-size: -webkit-fill-available;
+  background: deeppink;
+}
+
+.bos {
+  font-size: 5px;
+}
+
+.fiyat_bos {
+  border: 2px solid yellow;
+  background: yellow;
+}
+
+.fiyat_100den_fazla {
+  // opacity: 0.3;
+  background: lightgray;
+  flex: none;
+}
+
+.fiyat_100den_fazla .aditem-main--middle--description {
+  display: none;
+}
+
+.fiyat_vb {
+  background: lightgray;
+}
+
+.fiyat_10dan_az {
+  border: 5px solid green;
+  background: greenyellow;
+}
+
+.digerleri {
+  background: lightgray;
+}
+
+.monheim {
+  border: 5px solid red;
+}
+
+
+.ilan_bilgileri {
+  display: inline-block;
+  border: 3px solid rgb(204, 204, 204);
+  width: 333px;
+}
+
+#smooth-scroll-button {
+position: fixed; top: 0; right: 0; z-index: 9999;
+padding: 10px; border-radius: 10px; cursor: pointer; font-size: 70px; font-weight: bold;
+}
+.image_size_normal, .image_size_small {
+height: 160px
+}
+
+    `;
+
+var style = document.createElement('style');
+style.appendChild(document.createTextNode(css));
+document.head.appendChild(style);
+
+// add smooth scroll button in sticky div
+$("body").prepend(`
+<div id="ilanlar"></div>
+<div id="smooth-scroll-button">⬆️</div>
+`);
+
 const guid_generator = function () {
   const s4 = function () {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -19,110 +93,190 @@ let visitedLinks = [];
 // Zamanlayıcı aralığı (örneğin 5 dakika)
 const interval = 5 * 1000; // 5 saniyes
 let url = location.href;// "https://www.kleinanzeigen.de/s-40789/l1116r5";
-const run = function (_url, sona_ekle = false) {
+const run = function (_url) {
   console.log("run", _url);
   $.get(`${_url}`, function (data) {
-    if(_url.includes("seite:")){
-      sona_ekle = false;
-      let seite = parseInt(_url.split("seite:")[1].split("/")[0]);
-      seite--;
-      if(seite < 2){
-        url = _url.replace("/seite:" + (seite + 1), "");
-        // url = url.replace("/s-seite:" + (seite + 1), "/s-seite:2");
-        url = url.replace("s-seite:2", "s-suchen.html").replace("s-seite:1", "s-suchen.html");
-      }
-      else{
-        url = _url.replace("seite:" + (seite + 1), "seite:" + seite);
-      }
-    }
     let ilanlar = $(data).find(
       ".ad-listitem:not(.is-topad) .aditem-main"
     );
-    console.log("get", ilanlar.length);
-    // if not visited
-    // Linklerde değişiklik olduğu tespit edildi, kodu çalıştır
+
+    let yeni_ilanlar = 0;
+    for (let i = 0; i < ilanlar.length; i++) {
+      let link = $(ilanlar[i]).find('a').attr("href");
+      if (!visitedLinks.includes(link)) {
+        yeni_ilanlar++;
+      }
+    }
+    let seite = 0;
+    if(_url.includes("seite:")){
+      seite = parseInt(_url.split("seite:")[1].split("/")[0]);
+      seite--;
+      if(seite < 2){
+        url = _url.replace(`/seite:${seite + 1}`, "");
+        url = url.replace("s-seite:2", "s-suchen.html").replace("s-seite:1", "s-suchen.html");
+      }
+      else{
+        url = _url.replace(`seite:${seite + 1}`, "seite:" + seite);
+      }
+    }
+    else if(_url.includes("pageNum=")){
+      seite = parseInt(_url.split("pageNum=")[1].split("&")[0]);
+      seite--;
+      if(seite < 2){
+        url = _url.replace(`pageNum=${seite + 1}`, "");
+        url = url.replace("pageNum=2", "s-suchen.html").replace("pageNum=1", "s-suchen.html");
+      }
+      else{
+        url = _url.replace(`pageNum=${seite + 1}`, "pageNum=" + seite);
+      }
+    }
+    else if (yeni_ilanlar == 25) {
+      // ilk sayfadaki link sayisi 25 ise ikinci sayfaya git
+      // if "s-suchen.html" -> "s-seite:2"
+      if (_url.includes("s-suchen.html"))
+        url = _url.replace("s-suchen.html", "s-seite:2");
+      else
+        url = _url + "/seite:2";
+    }
+    var $ilanlarDiv = $("#ilanlar");
+    var $sayfa_bilgisi = $(`
+    <div class='ilan sayfa_bilgisi'>
+      Sayfa: ${parseInt(seite) + 1} - ${yeni_ilanlar} adet ilan bulundu
+    </div>`);
+    if (yeni_ilanlar !== 0) {
+      console.log("get", yeni_ilanlar);
+      setTimeout(function () {
+        $("#smooth-scroll-button").trigger("click");
+      }, 3000);
+
+      $ilanlarDiv.prepend($sayfa_bilgisi);
+    } else {
+      $sayfa_bilgisi.addClass("bos");
+      $sayfa_bilgisi.text("-");
+      $ilanlarDiv.prepend($sayfa_bilgisi);
+    }
+    // ilanlar jquery array ters çevir
+    ilanlar = $(ilanlar.get().reverse());
     ilanlar.each(function () {
       let link = $(this).find('a').attr("href");
       if (!visitedLinks.includes(link)) {
         let guid = guid_generator();
         // all link one div with guid
-        if(sona_ekle)
-          $("#ilanlar").append("<div class='ilan' id='" + guid + "'></div>");
-        else
-          $("#ilanlar").prepend("<div class='ilan' id='" + guid + "'></div>");
+        $("#ilanlar").prepend("<div class='ilan' id='" + guid + "'></div>");
         // if preise weniger als 10 euro then border is green
         let fiyat = $(this).find(".aditem-main--middle--price-shipping--price").text().trim();
         let fiyatNumber = fiyat.replace("€", "").replace("VB", "").replace(".", "").trim();
-        if (fiyat == "" || fiyat == "Zu verschenken")
-          $(`#${guid}`).css({
-            // display: 'inline-flex',
-            border: '2px solid yellow',
-            background: 'yellow'
-          });
-        else if (fiyatNumber > 100 || fiyat == "VB")
-          $(`#${guid}`).css({
-            opacity: '0.3',            
-            background: 'lightgray',
-            flex: 'none'
-          });
-        else if( fiyatNumber < 11)
-          $(`#${guid}`).css({
-            // display: 'inline-flex',
-            border: '2px solid green',
-            background: 'greenyellow'
-          });
-        else
-          $(`#${guid}`).css({
-            // display: 'inline-flex',
-            border: '2px solid red',
-            background: 'lightgray'
-          });
+        fiyata_gore_style(fiyat, guid, fiyatNumber);
+        if($(this).find(".aditem-main--top--left").text().includes("Monheim"))
+          $(`#${guid}`).addClass("monheim");  
+        // $(`#${guid}`).css({
+          //   border: '5px solid red',
+          // });
 
         // add information from class aditem-main--middle
         let aditemMainMiddle = $(this)
         let clonedAditemMainMiddle = aditemMainMiddle.clone();
+        // addclass
+        clonedAditemMainMiddle.addClass("ilan_bilgileri");
         styleFixer(clonedAditemMainMiddle);
 
         $(`#${guid}`).prepend(clonedAditemMainMiddle);
         
         visitedLinks.push(link);
         console.log("new link", link);
-        $.ajax({
-          url: link,
-          success: function (data) {
-            let imageElement = $(data).find("#viewad-image");
-
-            if (imageElement.length > 0) {
-              let clonedImage = imageElement.clone();
-              clonedImage.css("height", (fiyatNumber > 100 ? "50px" : "150px"));
-              clonedImage.wrap('<a href="' + link + '" target="_blank"></a>');
-              $(`#${guid}`).append(clonedImage.parent());
-            }
-          },
-        });
+        resimleri_yukle(link, fiyatNumber, guid);
       }
     });
-    // location.reload();
   });
 };
-// Zamanlayıcıyı başlatma
-run(location.href, true);
-// refresh 5 saniyede bir
-setInterval(function() {
-  run(url)
-}, interval);
 
-// refresh every 20 seconds
-setInterval(function () {
-  // location.reload();
-}, 20 * 1000);
+function resimleri_yukle(link, fiyatNumber, guid) {
+  $.ajax({
+    url: link,
+    success: function (data) {
+      let imageElement = $(data).find("#viewad-image");
+
+      if (imageElement.length > 0) {
+        let clonedImage = imageElement.clone();
+        // clonedImage.css("height", (fiyatNumber > 100 ? "50px" : "150px"));
+        clonedImage.addClass(fiyatNumber > 100 ? "image_size_normal" : "image_size_small");
+        clonedImage.wrap('<a href="' + link + '" target="_blank"></a>');
+        $(`#${guid}`).append(clonedImage.parent());
+      }
+    },
+  });
+}
+
+function fiyata_gore_style(fiyat, guid, fiyatNumber) {
+  if (fiyat == "" || fiyat == "Zu verschenken")
+    $(`#${guid}`).addClass("fiyat_bos");
+  else if (fiyatNumber > 100)
+    $(`#${guid}`).addClass("fiyat_100den_fazla");
+  else if (fiyat == "VB")
+    $(`#${guid}`).addClass("fiyat_vb");
+  else if (fiyatNumber < 11)
+    $(`#${guid}`).addClass("fiyat_10dan_az");
+  else
+    $(`#${guid}`).addClass("digerleri");
+}
+
+function scroll_isleri() {
+  var scrolling = false; // Kaydırma işlemi başladığında true, durduğunda false olacak
+  var animationFrame;
+
+  // Smooth scroll düğmesine tıklama işlemini dinle
+  $("#smooth-scroll-button").on("click", function (event) {
+    if (!scrolling) { // Eğer kaydırma işlemi başlamadıysa
+      scrolling = true; // Kaydırma işlemi başladığını işaretle
+      // radius color green
+      $("#smooth-scroll-button").css("background", "green");
+
+      var scrollAmount = 0.002; // Sayfanın 0.2 birim yukarı kaydırılacak hız (isteğe bağlı olarak ayarlayabilirsiniz)
+
+      function scrollStep() {
+        var currentScroll = $(window).scrollTop();
+        if (currentScroll <= 10) {
+          scrolling = false;
+          $("#smooth-scroll-button").css("background", "red");
+
+          cancelAnimationFrame(animationFrame);
+        } else {
+          window.scrollTo(0, currentScroll - scrollAmount * $(window).height());
+          animationFrame = requestAnimationFrame(scrollStep);
+        }
+      }
+
+      // Scroll işlemi başlat
+      animationFrame = requestAnimationFrame(scrollStep);
+    }
+  });
+  $(document).on("keydown", function (event) {
+    if (event.key === "Escape") {
+      scrolling = false;
+      $("#smooth-scroll-button").css("background", "red");
+
+      cancelAnimationFrame(animationFrame);
+    } else if (event.key === " ") {
+      event.preventDefault();
+      $("#smooth-scroll-button").trigger("click");
+    }
+  });
+}
 
 function styleFixer(clonedAditemMainMiddle) {
-  clonedAditemMainMiddle.css("display", "inline-block");
-  clonedAditemMainMiddle.css("border", "3px solid #ccc");
   clonedAditemMainMiddle.find(".aditem-main--middle--price-shipping--price").css("font-size", "30px");
   clonedAditemMainMiddle.find("p").css("margin", "0");
   clonedAditemMainMiddle.find("h2").css("margin", "0");
-  clonedAditemMainMiddle.css("width", "333px");
 }
 
+$(document).ready(function() {
+  // sayfa yükleninice interval kadar bekle ve 100 scroll yap
+  setTimeout(function() {
+    window.scrollBy(0, 100);
+  }, interval);
+  scroll_isleri();
+  // refresh 5 saniyede bir
+  setInterval(function() {
+    run(url)
+  }, interval);
+});
