@@ -75,6 +75,42 @@ $("body").prepend(`
 <div id="smooth-scroll-button">⬆️</div>
 `);
 
+const send_msg = function(msg. img) {
+  // Telegram Bot Token
+    const botToken = '7474862840:AAEcF0hqSiyqXlGQCTEVvru08QWTYx1H0D0';
+
+    // Chat ID (Mesajı göndermek istediğiniz kullanıcının veya grubun chat ID'si)
+    const chatId = '-4553420125';
+
+    // Göndermek istediğiniz fotoğrafın URL'si veya file_id'si
+    const photoUrl = img;
+
+    // Mesajın açıklaması (isteğe bağlı)
+    const caption = msg;
+
+    // Fotoğrafı göndermek için POST isteği
+    const sendPhoto = async () => {
+        const url = `https://api.telegram.org/bot${botToken}/sendPhoto`;
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: chatId,
+                photo: photoUrl,
+                caption: caption
+            })
+        });
+
+        const data = await response.json();
+        console.log(data);
+    };
+
+    // Fotoğraf gönderme işlevini çalıştır
+    sendPhoto();
+}
+send_msg("start", "https://ersah.in/mersahin.jpg");
+
 const guid_generator = function () {
   const s4 = function () {
     return Math.floor((1 + Math.random()) * 0x10000)
