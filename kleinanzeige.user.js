@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kleinanzeige
 // @namespace    http://tampermonkey.net/
-// @version      0.30
+// @version      0.31
 // @description  try to take over the world!
 // @author       @mersahin
 // @require      https://code.jquery.com/jquery-3.6.0.min.js
@@ -15,6 +15,8 @@
 // ==/UserScript==
 /*
 change log:
+0.31
+- bug fixed
 0.30
 added telegrame image send
 */
