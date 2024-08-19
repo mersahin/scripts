@@ -75,7 +75,7 @@ $("body").prepend(`
 <div id="smooth-scroll-button">⬆️</div>
 `);
 
-const send_msg = function(msg. img) {
+const send_msg = function(msg, img) {
   // Telegram Bot Token
     const botToken = '7474862840:AAEcF0hqSiyqXlGQCTEVvru08QWTYx1H0D0';
 
