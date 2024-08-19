@@ -3,65 +3,65 @@
 
 
 var css = `
-.sayfa_bilgisi {
-  color: white;
-  font-size: 30px;
-  font-weight: bold;
-  text-align: center;
-  inline-size: -webkit-fill-available;
-  background: deeppink;
-}
+  .sayfa_bilgisi {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    inline-size: -webkit-fill-available;
+    background: deeppink;
+  }
 
-.bos {
-  font-size: 5px;
-}
+  .bos {
+    font-size: 5px;
+  }
 
-.fiyat_bos {
-  border: 2px solid yellow;
-  background: yellow;
-}
+  .fiyat_bos {
+    border: 2px solid yellow;
+    background: yellow;
+  }
 
-.fiyat_100den_fazla {
-  // opacity: 0.3;
-  background: lightgray;
-  flex: none;
-}
+  .fiyat_100den_fazla {
+    // opacity: 0.3;
+    background: lightgray;
+    flex: none;
+  }
 
-.fiyat_100den_fazla .aditem-main--middle--description {
-  display: none;
-}
+  .fiyat_100den_fazla .aditem-main--middle--description {
+    display: none;
+  }
 
-.fiyat_vb {
-  background: lightgray;
-}
+  .fiyat_vb {
+    background: lightgray;
+  }
 
-.fiyat_10dan_az {
-  border: 5px solid green;
-  background: greenyellow;
-}
+  .fiyat_10dan_az {
+    border: 5px solid green;
+    background: greenyellow;
+  }
 
-.digerleri {
-  background: lightgray;
-}
+  .digerleri {
+    background: lightgray;
+  }
 
-.monheim {
-  border: 5px solid red;
-}
+  .monheim {
+    border: 5px solid red;
+  }
 
 
-.ilan_bilgileri {
-  display: inline-block;
-  border: 3px solid rgb(204, 204, 204);
-  width: 333px;
-}
+  .ilan_bilgileri {
+    display: inline-block;
+    border: 3px solid rgb(204, 204, 204);
+    width: 333px;
+  }
 
-#smooth-scroll-button {
-position: fixed; top: 0; right: 0; z-index: 9999;
-padding: 10px; border-radius: 10px; cursor: pointer; font-size: 70px; font-weight: bold;
-}
-.image_size_normal, .image_size_small {
-height: 160px
-}
+  #smooth-scroll-button {
+  position: fixed; top: 0; right: 0; z-index: 9999;
+  padding: 10px; border-radius: 10px; cursor: pointer; font-size: 70px; font-weight: bold;
+  }
+  .image_size_normal, .image_size_small {
+  height: 160px
+  }
 
     `;
 
@@ -74,42 +74,6 @@ $("body").prepend(`
 <div id="ilanlar"></div>
 <div id="smooth-scroll-button">⬆️</div>
 `);
-
-const send_msg = function(msg, img) {
-  // Telegram Bot Token
-    const botToken = '7474862840:AAEcF0hqSiyqXlGQCTEVvru08QWTYx1H0D0';
-
-    // Chat ID (Mesajı göndermek istediğiniz kullanıcının veya grubun chat ID'si)
-    const chatId = '-4553420125';
-
-    // Göndermek istediğiniz fotoğrafın URL'si veya file_id'si
-    const photoUrl = img;
-
-    // Mesajın açıklaması (isteğe bağlı)
-    const caption = msg;
-
-    // Fotoğrafı göndermek için POST isteği
-    const sendPhoto = async () => {
-        const url = `https://api.telegram.org/bot${botToken}/sendPhoto`;
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: chatId,
-                photo: photoUrl,
-                caption: caption
-            })
-        });
-
-        const data = await response.json();
-        console.log(data);
-    };
-
-    // Fotoğraf gönderme işlevini çalıştır
-    sendPhoto();
-}
-send_msg("start", "https://ersah.in/mersahin.jpg");
 
 const guid_generator = function () {
   const s4 = function () {
@@ -171,8 +135,10 @@ const run = function (_url) {
       // if "s-suchen.html" -> "s-seite:2"
       if (_url.includes("s-suchen.html"))
         url = _url.replace("s-suchen.html", "s-seite:2");
-      else
-        url = _url + "/seite:2";
+      // else {
+      //   debugger
+      //   url = _url + "/seite:2";
+      // }
     }
     var $ilanlarDiv = $("#ilanlar");
     var $sayfa_bilgisi = $(`
@@ -196,6 +162,7 @@ const run = function (_url) {
     ilanlar.each(function () {
       let link = $(this).find('a').attr("href");
       if (!visitedLinks.includes(link)) {
+        console.log("new link", link);
         let guid = guid_generator();
         // all link one div with guid
         $("#ilanlar").prepend("<div class='ilan' id='" + guid + "'></div>");
@@ -205,9 +172,6 @@ const run = function (_url) {
         fiyata_gore_style(fiyat, guid, fiyatNumber);
         if($(this).find(".aditem-main--top--left").text().includes("Monheim"))
           $(`#${guid}`).addClass("monheim");  
-        // $(`#${guid}`).css({
-          //   border: '5px solid red',
-          // });
 
         // add information from class aditem-main--middle
         let aditemMainMiddle = $(this)
@@ -219,14 +183,89 @@ const run = function (_url) {
         $(`#${guid}`).prepend(clonedAditemMainMiddle);
         
         visitedLinks.push(link);
-        console.log("new link", link);
-        resimleri_yukle(link, fiyatNumber, guid);
+        let detail = aditemMainMiddle.text().replace(/\s\s+/g, ' ').replace(/\n\n+/g, '\n');
+        let urunAdi = $(this).find("h2").text().trim()
+        resimleri_yukle(link, fiyatNumber, guid, urunAdi, detail);
       }
     });
   });
 };
 
-function resimleri_yukle(link, fiyatNumber, guid) {
+let messageQueue = [];
+let lastSentTime = 0;
+
+const send_msg = (function() {
+  const processQueue = async () => {
+    if (messageQueue.length > 0) {
+      const currentTime = Date.now();
+      if (currentTime - lastSentTime >= 13 * 1000) {
+        const { msg, img } = messageQueue.shift();
+        console.log(">>> messageQueue -- LENGTH: ", messageQueue.length);
+        const result = await sendPhoto(msg, img);
+        if (result !== true) {
+          messageQueue.push({ msg, img });
+          console.log(">>> messageQueue ++ LENGTH: ", messageQueue.length);
+        }
+        lastSentTime = currentTime;
+      }
+    }
+
+    setTimeout(processQueue, 1000);
+  };
+
+  const sendPhoto = async (msg, img) => {
+    // Telegram Bot Token
+    const botToken = '7474862840:AAEcF0hqSiyqXlGQCTEVvru08QWTYx1H0D0';
+
+    // Chat ID (Mesajı göndermek istediğiniz kullanıcının veya grubun chat ID'si)
+    const chatId = '-4553420125';
+
+    // Göndermek istediğiniz fotoğrafın URL'si veya file_id'si
+    const photoUrl = img;
+
+    // Mesajın açıklaması (isteğe bağlı)
+    
+    const caption = msg;
+
+    // Fotoğrafı göndermek için POST isteği
+    const url = `https://api.telegram.org/bot${botToken}/sendMediaGroup`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: chatId,
+              caption: caption,
+              media: photoUrl.slice(0, 10).map((i, index) => ({
+                  type: 'photo',
+                  media: i,
+                  ...(index === 0 && { caption: caption})
+              }))
+            })
+        });
+        const data = await response.json();
+        console.log(data);
+
+        if (!response.ok) {
+            throw new Error(data);
+        }
+        return true;
+    } catch (error) {
+        console.error('Failed to send photo:', error);
+        return error;
+    }
+  };
+
+  processQueue();
+  return function(msg, img) {
+    messageQueue.push({ msg, img });
+    console.log(">>> messageQueue ++ LENGTH: ", messageQueue.length);
+  };
+})();
+send_msg("start", ["https://ersah.in/mersahin.jpg"]);
+
+function resimleri_yukle(link, fiyatNumber, guid, urunAdi, detail) {
   $.ajax({
     url: link,
     success: function (data) {
@@ -238,6 +277,17 @@ function resimleri_yukle(link, fiyatNumber, guid) {
         clonedImage.addClass(fiyatNumber > 100 ? "image_size_normal" : "image_size_small");
         clonedImage.wrap('<a href="' + link + '" target="_blank"></a>');
         $(`#${guid}`).append(clonedImage.parent());
+        
+        let fullurl = "https://www.kleinanzeigen.de" + link;
+        let urunAdi = $(data).find(".aditem-main--top--title").text().trim();
+        let caption = 
+        `${urunAdi}
+        Fiyat: ${fiyatNumber}
+        Link: ${fullurl}
+        detay: ${detail}`;
+        let images = clonedImage.map((i, el) => $(el).attr('src')).get();
+        let captionWithLimit = caption.substring(0, 1024);
+        send_msg(captionWithLimit, images);
       }
     },
   });
