@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kleinanzeige
 // @namespace    http://tampermonkey.net/
-// @version      0.29
+// @version      0.30
 // @description  try to take over the world!
 // @author       @mersahin
 // @require      https://code.jquery.com/jquery-3.6.0.min.js
@@ -13,3 +13,8 @@
 // @downloadURL  https://github.com/mersahin/scripts/raw/main/kleinanzeige.user.js
 // @grant        none
 // ==/UserScript==
+/*
+change log:
+0.30
+added telegrame image send
+*/
