@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kleinanzeige2
 // @namespace    http://tampermonkey.net/
-// @version      0.32
+// @version      0.33
 // @description  try to take over the world!
 // @author       @mersahin
 // @require      https://code.jquery.com/jquery-3.6.0.min.js
@@ -15,6 +15,8 @@
 // ==/UserScript==
 /*
 change log:
+0.33
+- json eklendi
 0.32
 - bug fixed
 - telegram mesajini toplu resimli atar hale geldi
